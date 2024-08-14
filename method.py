@@ -197,8 +197,8 @@ def decide_medium_direction(head, map_data):
     if closest_target:
         path = astar(map_data, head, closest_target)
     if path:
-        next_point = path[-1]
-        dx, dy, dz = next_point[0] - head.x, next_point[1] - head.y, next_point[2] - head.z
+        next_point = path[1]
+        dx, dy, dz = next_point.x - head.x, next_point.y - head.y, next_point.z - head.z
         return dx, dy, dz
 
     valid = has_valid_move(head, map_data)

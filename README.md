@@ -1,9 +1,14 @@
 # Snake3D
-[中文](#Chinese)
-
 
 
 3-Dimension snake game implemented using different strategies.
+
+```html
+<video width="500" height="400" controls>
+  <source src="demo.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+```
 
 
 
@@ -63,7 +68,7 @@ optional arguments:
   --barriers [BARRIERS ...]
                         Barrier positions (flat list), e.g., 3 3 2 2 1 3
   --map_size MAP_SIZE MAP_SIZE MAP_SIZE
-                        Map size (length x width x height), must specify three values 						  greater than or equal to 2
+                        Map size (length x width x height), must specify three values greater than or equal to 2
   --initial_snake [INITIAL_SNAKE ...]
                         Initial snake position (flat list), e.g., 1 1 0 0 1 0 0 0 0
 ```
@@ -72,7 +77,7 @@ optional arguments:
 
 
 
-# 3维贪吃蛇 {#Chinese}
+# 3维贪吃蛇
 
 
 
