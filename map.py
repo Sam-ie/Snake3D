@@ -104,7 +104,7 @@ class GameConfig:
 
         self.AI_level = AI_level
         self.num_apples = num_apples
-        self.score_apples = score_apples
+        self.score_apples = score_apples + 1
         self.INTERVAL = interval
         self.barriers = barriers
         self.map_size = map_size
@@ -163,8 +163,8 @@ def set_parser():
         language = 'en'
 
     parser = ArgumentParser(description=get_message('lang', language))
-    parser.add_argument('--AI_level', type=int, default=3, help=get_message('AI_level', language))
-    parser.add_argument('--num_apples', type=int, default=1, help=get_message('num_apples', language))
+    parser.add_argument('--AI_level', type=int, default=1, help=get_message('AI_level', language))
+    parser.add_argument('--num_apples', type=int, default=3, help=get_message('num_apples', language))
     parser.add_argument('--score_apples', type=int, default=100, help=get_message('score_apples', language))
     parser.add_argument('--interval', type=int, default=40, help=get_message('interval', language))
     parser.add_argument('--barriers', type=int, nargs='*', help=get_message('barriers', language))

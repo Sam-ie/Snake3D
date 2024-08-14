@@ -70,6 +70,8 @@ def astar(map_data, start, goal):
 
 
 def find_closest_target(head, map_data):
+    if map_data[head.x][head.y][head.z] > 0:
+        return head.x, head.y, head.z
     queue = deque([(head.x, head.y, head.z)])  # 使用deque作为队列
     visited = {(head.x, head.y, head.x)}
 
@@ -78,7 +80,7 @@ def find_closest_target(head, map_data):
         for dx, dy, dz in directions:
             nx, ny, nz = x + dx, y + dy, z + dz
             if 0 <= nx < len(map_data) and 0 <= ny < len(map_data[0]) and 0 <= nz < len(map_data[0][0]) and (
-            nx, ny, nz) not in visited:
+                    nx, ny, nz) not in visited:
                 if map_data[nx][ny][nz] > 0:  # 如果找到一个目标点
                     return nx, ny, nz
                 visited.add((nx, ny, nz))  # 标记为已访问
@@ -187,10 +189,16 @@ def bfs_find_shortest_path(map_data, start, quality_directions):
     到达任意目标点的最短路径长度。目标点是map_data上值大于0的格子。
     返回一个列表，元素是方向，按照路径长度从小到大排序。
     """
+    shortest_distance = len(map_data) * len(map_data[0]) * len(map_data[0][0])
     path_lengths = {}
     for dx, dy, dz in quality_directions:
-        new_start = Point(start.x + dx, start.y + dy, start.z + dz)
-        distance = bfs(map_data, new_start)
+        distance = None
+        new_head = Point(start.x + dx, start.y + dy, start.z + dz)
+        closest_target = find_closest_target(new_head, map_data)
+        if closest_target:
+            path = astar(map_data, (start.x + dx, start.y + dy, start.z + dz), closest_target)
+            if path:
+                distance = len(path)
         if distance is not None:
             path_lengths[(dx, dy, dz)] = distance
 
