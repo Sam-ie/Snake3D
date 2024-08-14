@@ -1,4 +1,5 @@
 import copy
+import heapq
 import random
 from collections import deque
 from heapq import heappop, heappush
@@ -6,7 +7,7 @@ from heapq import heappop, heappush
 from map import Point
 import map
 
-directions = [(1, 0, 0), (-1, 0, 0), (0, 1, 0), (0, -1, 0), (0, 0, 1), (0, 0, -1)]  # 右、左、前、后、下、上
+directions = [(1, 0, 0), (-1, 0, 0), (0, 1, 0), (0, -1, 0), (0, 0, -1), (0, 0, 1)]  # 右、左、前、后、下、上
 
 
 def has_valid_move(head, map_data):
@@ -28,63 +29,63 @@ def has_valid_move(head, map_data):
 
 
 def heuristic(a, b):
-    return abs(a[0] - b[0]) + abs(a[1] - b[1]) + abs(a[2] - b[2])
+    # 访问Point对象的x, y, z属性来计算曼哈顿距离
+    return abs(a.x - b.x) + abs(a.y - b.y) + abs(a.z - b.z)
 
 
 def astar(map_data, start, goal):
-    if map_data[goal[0]][goal[1]][goal[2]] > 0:  # 确保目标点的值大于0
-        close_set = set()
-        came_from = {}
-        gscore = {start: 0}
-        fscore = {start: heuristic(start, goal)}
-        oheap = []
+    close_set = set()
+    came_from = {start: None}  # 初始化时预设从start到自身的路径
+    gscore = {start: 0}
+    fscore = {start: heuristic(start, goal)}
+    oheap = []
 
-        heappush(oheap, (fscore[start], start))
+    heapq.heappush(oheap, (fscore[start], start))
 
-        while oheap:
-            current = heappop(oheap)[1]
-            if current == goal:
-                data = []
-                while current in came_from:
-                    data.append(current)
-                    current = came_from[current]
-                return data
+    while oheap:
+        current = heapq.heappop(oheap)[1]
+        if current == goal:
+            data = []
+            while current in came_from:
+                data.append(current)
+                current = came_from[current]
+            return data[::-1]
 
-            close_set.add(current)
-            for dx, dy, dz in directions:
-                neighbor = current[0] + dx, current[1] + dy, current[2] + dz
-                tentative_g_score = gscore[current] + heuristic(current, neighbor)
-                if 0 <= neighbor[0] < len(map_data) and 0 <= neighbor[1] < len(map_data[0]) and 0 <= neighbor[2] < len(
-                        map_data[0][0]):
-                    if map_data[neighbor[0]][neighbor[1]][neighbor[2]] >= 0:  # 确保邻居不是障碍
-                        if neighbor in close_set and tentative_g_score >= gscore.get(neighbor, 0):
-                            continue
+        close_set.add(current)
+        for dx, dy, dz in directions:
+            neighbor = Point(current.x + dx, current.y + dy, current.z + dz)
+            tentative_g_score = gscore[current] + heuristic(current, neighbor)
+            if 0 <= neighbor.x < len(map_data) and 0 <= neighbor.y < len(map_data[0]) and 0 <= neighbor.z < len(
+                    map_data[0][0]):
+                if map_data[neighbor.x][neighbor.y][neighbor.z] >= 0:  # 确保邻居不是障碍
+                    if neighbor in close_set and tentative_g_score >= gscore.get(neighbor, 0):
+                        continue
 
-                        if tentative_g_score < gscore.get(neighbor, 0) or neighbor not in [i[1] for i in oheap]:
-                            came_from[neighbor] = current
-                            gscore[neighbor] = tentative_g_score
-                            fscore[neighbor] = tentative_g_score + heuristic(neighbor, goal)
-                            heappush(oheap, (fscore[neighbor], neighbor))
+                    if tentative_g_score < gscore.get(neighbor, 0) or neighbor not in [i[1] for i in oheap]:
+                        came_from[neighbor] = current
+                        gscore[neighbor] = tentative_g_score
+                        fscore[neighbor] = tentative_g_score + heuristic(neighbor, goal)
+                        heapq.heappush(oheap, (fscore[neighbor], neighbor))
 
     return None
 
 
 def find_closest_target(head, map_data):
     if map_data[head.x][head.y][head.z] > 0:
-        return head.x, head.y, head.z
-    queue = deque([(head.x, head.y, head.z)])  # 使用deque作为队列
-    visited = {(head.x, head.y, head.x)}
+        return head
+    queue = deque([head])  # 使用deque作为队列，并使用Point对象
+    visited = {head}
 
     while queue:
-        x, y, z = queue.popleft()  # 从队列中取出第一个元素
+        current = queue.popleft()  # 从队列中取出第一个元素
         for dx, dy, dz in directions:
-            nx, ny, nz = x + dx, y + dy, z + dz
-            if 0 <= nx < len(map_data) and 0 <= ny < len(map_data[0]) and 0 <= nz < len(map_data[0][0]) and (
-                    nx, ny, nz) not in visited:
-                if map_data[nx][ny][nz] > 0:  # 如果找到一个目标点
-                    return nx, ny, nz
-                visited.add((nx, ny, nz))  # 标记为已访问
-                queue.append((nx, ny, nz))  # 将新的位置添加到队列中
+            neighbor = Point(current.x + dx, current.y + dy, current.z + dz)
+            if 0 <= neighbor.x < len(map_data) and 0 <= neighbor.y < len(map_data[0]) and 0 <= neighbor.z < len(
+                    map_data[0][0]) and neighbor not in visited:
+                if map_data[neighbor.x][neighbor.y][neighbor.z] > 0:  # 如果找到一个目标点
+                    return neighbor
+                visited.add(neighbor)  # 标记为已访问
+                queue.append(neighbor)  # 将新的位置添加到队列中
 
     return None  # 如果没有找到目标点
 
@@ -93,18 +94,19 @@ def bfs_count_connected_regions(map_data, start):
     """
     使用广度优先搜索计算连通的可通行区域的格子数。
     """
-    visited = {(start.x, start.y, start.z)}
-    queue = deque([(start.x, start.y, start.z)])
+    visited = {start}
+    queue = deque([start])
 
     while queue:
-        cx, cy, cz = queue.popleft()
-        if map_data[cx][cy][cz] >= 0:
+        current = queue.popleft()
+        if map_data[current.x][current.y][current.z] >= 0:
             for dx, dy, dz in directions:
-                nx, ny, nz = cx + dx, cy + dy, cz + dz
-                if 0 <= nx < len(map_data) and 0 <= ny < len(map_data[0]) and 0 <= nz < len(map_data[0][0]) and \
-                        map_data[nx][ny][nz] >= 0 and (nx, ny, nz) not in visited:
-                    visited.add((nx, ny, nz))
-                    queue.append((nx, ny, nz))
+                neighbor = Point(current.x + dx, current.y + dy, current.z + dz)
+                if 0 <= neighbor.x < len(map_data) and 0 <= neighbor.y < len(map_data[0]) and 0 <= neighbor.z < len(
+                        map_data[0][0]) and \
+                        map_data[neighbor.x][neighbor.y][neighbor.z] >= 0 and neighbor not in visited:
+                    visited.add(neighbor)
+                    queue.append(neighbor)
     return len(visited)
 
 
@@ -157,46 +159,19 @@ def is_quality_move(head, map_data):
     return sorted_directions
 
 
-def bfs(map_data, start):
-    """
-    使用广度优先搜索从start位置出发到达最近的目标点（值大于0的格子）的最短距离。
-    返回距离，如果找不到目标则返回None。
-    """
-    queue = deque([start])
-    visited = {start}
-    distance = 0
-
-    while queue:
-        for _ in range(len(queue)):
-            current = queue.popleft()
-            if map_data[current.x][current.y][current.z] > 0:
-                return distance
-
-            for dx, dy, dz in directions:
-                next_x, next_y, next_z = current.x + dx, current.y + dy, current.z + dz
-                if (0 <= next_x < len(map_data) and 0 <= next_y < len(map_data[0]) and 0 <= next_z < len(
-                        map_data[0][0]) and (next_x, next_y, next_z) not in visited
-                        and map_data[next_x][next_y][next_z] >= 0):
-                    queue.append(Point(next_x, next_y, next_z))
-                    visited.add(Point(next_x, next_y, next_z))
-        distance += 1
-    return None
-
-
-def bfs_find_shortest_path(map_data, start, quality_directions):
+def find_shortest_path(map_data, start, quality_directions):
     """
     使用广度优先搜索找到从start位置出发，通过quality_directions中给定的方向
     到达任意目标点的最短路径长度。目标点是map_data上值大于0的格子。
     返回一个列表，元素是方向，按照路径长度从小到大排序。
     """
-    shortest_distance = len(map_data) * len(map_data[0]) * len(map_data[0][0])
     path_lengths = {}
     for dx, dy, dz in quality_directions:
         distance = None
         new_head = Point(start.x + dx, start.y + dy, start.z + dz)
         closest_target = find_closest_target(new_head, map_data)
         if closest_target:
-            path = astar(map_data, (start.x + dx, start.y + dy, start.z + dz), closest_target)
+            path = astar(map_data, new_head, closest_target)
             if path:
                 distance = len(path)
         if distance is not None:
@@ -220,7 +195,7 @@ def decide_medium_direction(head, map_data):
     closest_target = find_closest_target(head, map_data)
     path = None
     if closest_target:
-        path = astar(map_data, (head.x, head.y, head.z), closest_target)
+        path = astar(map_data, head, closest_target)
     if path:
         next_point = path[-1]
         dx, dy, dz = next_point[0] - head.x, next_point[1] - head.y, next_point[2] - head.z
@@ -239,8 +214,8 @@ def decide_advanced_direction(head, map_data, rate):
 
     if quality:
         quality_paths = [dir for dir, _ in quality]
-        # 使用BFS寻找最短路径
-        shortest_paths = bfs_find_shortest_path(map_data, head, quality_paths)
+        # 寻找最短路径
+        shortest_paths = find_shortest_path(map_data, head, quality_paths)
 
         # 如果shortest_paths不为空，检查其中是否有在quality中排在rate前的元素
         if shortest_paths:

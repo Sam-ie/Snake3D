@@ -85,14 +85,24 @@ class Point:
         self.y = y
         self.z = z
 
+    def __hash__(self):
+        # 返回一个基于点坐标的唯一哈希值
+        return hash((self.x, self.y, self.z))
+
     def __eq__(self, other):
         if isinstance(other, Point):
             return self.x == other.x and self.y == other.y and self.z == other.z
         return False
 
-    def __hash__(self):
-        # 返回一个基于点坐标的唯一哈希值
-        return hash((self.x, self.y, self.z))
+    def __lt__(self, other):
+        if not isinstance(other, Point):
+            return NotImplemented
+        return (self.x, self.y, self.z) < (other.x, other.y, other.z)
+
+    def __gt__(self, other):
+        if not isinstance(other, Point):
+            return NotImplemented
+        return (self.x, self.y, self.z) > (other.x, other.y, other.z)
 
 
 class GameConfig:
@@ -163,10 +173,10 @@ def set_parser():
         language = 'en'
 
     parser = ArgumentParser(description=get_message('lang', language))
-    parser.add_argument('--AI_level', type=int, default=1, help=get_message('AI_level', language))
+    parser.add_argument('--AI_level', type=int, default=3, help=get_message('AI_level', language))
     parser.add_argument('--num_apples', type=int, default=3, help=get_message('num_apples', language))
     parser.add_argument('--score_apples', type=int, default=100, help=get_message('score_apples', language))
-    parser.add_argument('--interval', type=int, default=40, help=get_message('interval', language))
+    parser.add_argument('--interval', type=int, default=50, help=get_message('interval', language))
     parser.add_argument('--barriers', type=int, nargs='*', help=get_message('barriers', language))
     parser.add_argument('--map_size', type=int, nargs=3, default=(5, 5, 5), help=get_message('map_size', language))
     parser.add_argument('--initial_snake', type=int, nargs='*', help=get_message('initial_snake', language))
