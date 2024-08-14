@@ -110,12 +110,12 @@ class GameConfig:
 
     def generate_map(self):
         # 创建一个全为0的三维数组
-        map_data = [[[0] * self.map_size[0] for _ in range(self.map_size[1])] for _ in range(self.map_size[2])]
+        map_data = [[[0] * self.map_size[2] for _ in range(self.map_size[1])] for _ in range(self.map_size[0])]
 
         # 将points中的位置设置为-1
         for barrier in self.barriers:
-            if 0 <= barrier.x < self.map_size[0] and 0 <= barrier.y < self.map_size[1] and 0 <= barrier.z < \
-                    self.map_size[2]:
+            if 0 <= barrier.x < self.map_size[2] and 0 <= barrier.y < self.map_size[1] and 0 <= barrier.z < \
+                    self.map_size[0]:
                 map_data[barrier.x][barrier.y][barrier.z] = -1
 
         # 将initial_snake中的位置设置为-2和-3
@@ -164,7 +164,7 @@ def set_parser():
     parser.add_argument('--score_apples', type=int, default=100, help=get_message('score_apples', language))
     parser.add_argument('--interval', type=int, default=40, help=get_message('interval', language))
     parser.add_argument('--barriers', type=int, nargs='*', help=get_message('barriers', language))
-    parser.add_argument('--map_size', type=int, nargs=3, default=(7, 7, 7), help=get_message('map_size', language))
+    parser.add_argument('--map_size', type=int, nargs=3, default=(7, 5, 3), help=get_message('map_size', language))
     parser.add_argument('--initial_snake', type=int, nargs='*', help=get_message('initial_snake', language))
 
     args = parser.parse_args()

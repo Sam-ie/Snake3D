@@ -79,12 +79,8 @@ if __name__ == '__main__':
     fig = plt.figure(figsize=(10, 10))
     ax = fig.add_subplot(111, projection='3d')
 
-    apples = model.Apple(config.MAP_DATA, config.num_apples)
-
-    # 使用INITIAL_SNAKE_BODY的第一个元素作为头部，其余作为身体
-    head = config.INITIAL_SNAKE[0]
-    body = [pos for pos in config.INITIAL_SNAKE[1:]]
-    snake = model.Snake(head, body, apples)
+    apples = model.Apple(config)
+    snake = model.Snake(apples, config)
 
     # 创建动画
     draw_map()
