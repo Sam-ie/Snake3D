@@ -39,9 +39,9 @@ def update(frame):
         return
 
     # 更新MAP_DATA
-    for i in range(config.MAP_DATA.shape[0]):
-        for j in range(config.MAP_DATA.shape[1]):
-            for k in range(config.MAP_DATA.shape[2]):
+    for i in range(len(config.MAP_DATA)):
+        for j in range(len(config.MAP_DATA[0])):
+            for k in range(len(config.MAP_DATA[0][0])):
                 if config.MAP_DATA[i][j][k] > 0:
                     config.MAP_DATA[i][j][k] -= 1
                     if config.MAP_DATA[i][j][k] == 0:
@@ -70,6 +70,9 @@ def draw_map():
     ax.set_ylabel('Y axis')
     ax.set_zlabel('Z axis')
     ax.set_title(f"Score: {snake.score}")
+
+    # 设置3D图像的长宽比
+    ax.set_box_aspect(map_data.shape)
 
 
 if __name__ == '__main__':

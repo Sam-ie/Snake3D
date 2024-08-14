@@ -56,7 +56,7 @@ class Snake:
         return False
 
     def move(self):
-        dx, dy, dz = method.decide_direction(self.head, self.AI_level)
+        dx, dy, dz = method.decide_direction(self.head, self.AI_level, self.map_data)
         new_head = Point(self.head.x + dx, self.head.y + dy, self.head.z + dz)
 
         # 检查新位置是否在地图边界内和是否与自己碰撞
