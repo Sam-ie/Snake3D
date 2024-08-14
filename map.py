@@ -174,11 +174,11 @@ def set_parser():
 
     parser = ArgumentParser(description=get_message('lang', language))
     parser.add_argument('--AI_level', type=int, default=3, help=get_message('AI_level', language))
-    parser.add_argument('--num_apples', type=int, default=2, help=get_message('num_apples', language))
+    parser.add_argument('--num_apples', type=int, default=1, help=get_message('num_apples', language))
     parser.add_argument('--score_apples', type=int, default=100, help=get_message('score_apples', language))
     parser.add_argument('--interval', type=int, default=50, help=get_message('interval', language))
     parser.add_argument('--barriers', type=int, nargs='*', help=get_message('barriers', language))
-    parser.add_argument('--map_size', type=int, nargs=3, default=(3, 3, 5), help=get_message('map_size', language))
+    parser.add_argument('--map_size', type=int, nargs=3, default=(5, 5, 5), help=get_message('map_size', language))
     parser.add_argument('--initial_snake', type=int, nargs='*', help=get_message('initial_snake', language))
 
     args = parser.parse_args()

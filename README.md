@@ -1,16 +1,10 @@
 # Snake3D
 
-
 3-Dimension snake game implemented using different strategies.
 
-```html
-<video width="500" height="400" controls>
-  <source src="demo.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
-```
+[中文](#3维贪吃蛇)
 
-
+![Alt Text](./demo.gif)
 
 ### Requirements
 
@@ -83,7 +77,7 @@ optional arguments:
 
 由不同策略实现的三维贪吃蛇游戏。
 
-
+[English](#snake3d)
 
 ### 依赖
 
