@@ -43,22 +43,22 @@ numpy==1.23.5
 ### Parser
 
 ```python
-usage: main.py [-h] [--AI_level AI_LEVEL] [--num_apples NUM_APPLES] [--score_apples SCORE_APPLES] [--interval INTERVAL] [--barriers [BARRIERS ...]]
-               [--map_size MAP_SIZE MAP_SIZE MAP_SIZE] [--initial_snake [INITIAL_SNAKE ...]]
+usage: main.py [-h] [--AI_level AI_LEVEL] [--num_apples NUM_APPLES] [--score_apples SCORE_APPLES] [--interval INTERVAL]
+               [--barriers [BARRIERS ...]] [--map_size MAP_SIZE MAP_SIZE MAP_SIZE] [--initial_snake [INITIAL_SNAKE ...]]
 ```
 
 ```
 optional arguments:
   -h, --help            
-  						Show this help message and exit
+                        Show this help message and exit
   --AI_level AI_LEVEL   
-  						Computer level: 1-3
+                        Computer level: 1-3
   --num_apples NUM_APPLES
                         Number of apples
   --score_apples SCORE_APPLES
                         Score per apple: >2
   --interval INTERVAL   
-  						Animation frame rate control
+                        Animation frame rate control
   --barriers [BARRIERS ...]
                         Barrier positions (flat list), e.g., 3 3 2 2 1 3
   --map_size MAP_SIZE MAP_SIZE MAP_SIZE
@@ -116,22 +116,22 @@ numpy==1.23.5
 ### 参数
 
 ```python
-usage: main.py [-h] [--AI_level AI_LEVEL] [--num_apples NUM_APPLES] [--score_apples SCORE_APPLES] [--interval INTERVAL] [--barriers [BARRIERS ...]]
-               [--map_size MAP_SIZE MAP_SIZE MAP_SIZE] [--initial_snake [INITIAL_SNAKE ...]]
+usage: main.py [-h] [--AI_level AI_LEVEL] [--num_apples NUM_APPLES] [--score_apples SCORE_APPLES] [--interval INTERVAL]
+               [--barriers [BARRIERS ...]] [--map_size MAP_SIZE MAP_SIZE MAP_SIZE] [--initial_snake [INITIAL_SNAKE ...]]
 ```
 
 ```
 游戏配置参数:
   -h, --help            
-  						帮助信息
+                        帮助信息
   --AI_level AI_LEVEL   
-  						电脑等级：1-3
+                        电脑等级：1-3
   --num_apples NUM_APPLES
                         苹果数量
   --score_apples SCORE_APPLES
                         苹果分值：>2
   --interval INTERVAL   
-  						控制动画帧率，50为0.2s一帧
+                        控制动画帧率，50为0.2s一帧
   --barriers [BARRIERS ...]
                         障碍位置（扁平列表），形如3 3 2 2 1 3
   --map_size MAP_SIZE MAP_SIZE MAP_SIZE
